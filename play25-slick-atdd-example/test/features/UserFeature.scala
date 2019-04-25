@@ -2,15 +2,14 @@ package features
 
 import controllers.UserController
 import models.Tables.UsersRow
-import org.scalatest.{BeforeAndAfterEachTestData, FeatureSpec, GivenWhenThen, MustMatchers, TestData, fixture}
+import org.scalactic.source.Position
+import org.scalatest._
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.test._
 import play.api.test.Helpers._
 
 class UserFeature extends FeatureSpec with OneAppPerSuite with GivenWhenThen with MustMatchers
-  with BeforeAndAfterEachTestData with fixture.FeatureSpec {
-
-
+  with BeforeAndAfter with BeforeAndAfterAll {
 
   feature("User management") {
     scenario("See user list") {
@@ -25,7 +24,6 @@ class UserFeature extends FeatureSpec with OneAppPerSuite with GivenWhenThen wit
           ||id|name|
           |${users.map(u => s"|${u.id}|${u.name}|").mkString("\n|")}
         """.stripMargin)
-      setupDatabase()
 
       When("I access user list page.")
       val controller = new UserController()
@@ -39,8 +37,50 @@ class UserFeature extends FeatureSpec with OneAppPerSuite with GivenWhenThen wit
       users.foreach{ u =>
         body must include (u.name)
       }
+      pending
+
     }
   }
 
-  override protected def beforeEach(testData: TestData): Unit = super.beforeEach(testData)
+  feature("Feature 1") {
+    println("======== feature 1 start")
+    scenario("Scenario 1-1") {
+      "a" must be ("a")
+      println("======== scenario 1-1")
+    }
+    scenario("Scenario 1-2") {
+      "a" must be ("a")
+      println("======== scenario 1-2")
+    }
+    println("======== feature 1 end")
+  }
+
+  feature("Feature 2") {
+    println("======== feature 2 start")
+    scenario("Scenario 2-1") {
+      "a" must be ("a")
+      println("======== scenario 2-1")
+    }
+    scenario("Scenario 2-2") {
+      "a" must be ("a")
+      println("======== scenario 2-2")
+    }
+    println("======== feature 2 end")
+  }
+
+  override protected def before(fun: => Any)(implicit pos: Position): Unit = {
+    println("========== before")
+  }
+
+
+  override protected def after(fun: => Any)(implicit pos: Position): Unit = {
+    println("========== after")
+  }
+
+  override protected def beforeAll(): Unit = {
+    println("========== beforeAll")
+  }
+  override protected def afterAll(): Unit = {
+    println("========== afterAll")
+  }
 }
